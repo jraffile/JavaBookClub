@@ -1,1 +1,1 @@
-# JavaBookClub
+# JavaBookClub is AWESOME!!!
