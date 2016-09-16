@@ -1,5 +1,3 @@
-package sample;
-
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -30,14 +28,13 @@ public class HangMan extends Application{
         Line post = new Line(60, 500, 60, 100);
         Line crossbar = new Line(60, 100, 200, 100);
         Line noose = new Line(200, 100, 200, 140);
-//        drawHead();
+//        drawHead();;
 //        drawBody();
 //        drawArm("left");
 //        drawArm("right");
 //        drawLeg("left");
 //        drawLeg("right");
         pane.getChildren().addAll(baseline, post, crossbar, noose);
-
         char[] word = getWord().toCharArray();
         FlowPane wordDisplay = new FlowPane();
         wordDisplay.setHgap(10);
