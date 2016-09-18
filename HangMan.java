@@ -20,6 +20,8 @@ import java.util.Scanner;
 public class HangMan extends Application{
     BorderPane pane = new BorderPane();
     int lettersFound = 0;
+    int MAX_GUESSES = 6;
+    int guessesLeft = MAX_GUESSES;
     ArrayList<HangmanTile> wordTiles = new ArrayList<HangmanTile>();
 
     @Override
@@ -38,7 +40,8 @@ public class HangMan extends Application{
 //        drawLeg("right");
         pane.getChildren().addAll(baseline, post, crossbar, noose);
 
-        char[] word = getWord().toCharArray();
+        String wordString = getWord();
+        char[] word = wordString.toCharArray();
         FlowPane wordDisplay = new FlowPane();
         wordDisplay.setHgap(10);
         wordDisplay.setAlignment(Pos.CENTER);
@@ -56,10 +59,29 @@ public class HangMan extends Application{
         System.out.println("Go ahead and guess a letter");
         scene.setOnKeyPressed(e ->{
             char guess = e.getText().charAt(0);
-            for(HangmanTile tile : wordTiles) {
-                if (tile.letter == guess) {
-                    tile.text.setText("" + guess);
-                    lettersFound++;
+            if (wordString.indexOf(guess) == -1){
+                switch (guessesLeft) {
+                    case 1 : drawLeg("right");
+                        System.out.print("You Lose");
+                    case 2 : drawLeg("left");
+                        break;
+                    case 3 : drawArm("right");
+                        break;
+                    case 4 : drawArm("left");
+                        break;
+                    case 5 : drawBody();
+                        break;
+                    case 6 : drawHead();
+                        break;
+                }
+                guessesLeft--;
+            }
+            else {
+                for (HangmanTile tile : wordTiles) {
+                    if (tile.letter == guess) {
+                        tile.text.setText("" + guess);
+                        lettersFound++;
+                    }
                 }
             }
         });
