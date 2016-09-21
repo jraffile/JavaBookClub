@@ -79,6 +79,7 @@ public class HangMan extends Application{
                     if (tile.letter == guess) {
                         tile.text.setText("" + guess);
                         lettersFound++;
+                        if (isGameOver()) { guessesLeft = 0; }
                     }
                 }
             }
@@ -140,5 +141,9 @@ public class HangMan extends Application{
             return this.letter;
         }
     }
+    public static void main(String[] args) {
+        launch(args);
+    }
+
 }
 
