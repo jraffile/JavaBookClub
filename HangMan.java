@@ -12,7 +12,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 
 public class HangMan extends Application{
@@ -21,6 +20,9 @@ public class HangMan extends Application{
     int MAX_GUESSES = 6;
     int guessesLeft = MAX_GUESSES;
     ArrayList<HangmanTile> wordTiles = new ArrayList<HangmanTile>();
+    ArrayList<HangmanTile> alphabetTiles = new ArrayList<HangmanTile>();
+    ArrayList<Character> alphabet = new ArrayList<Character>();
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -30,12 +32,6 @@ public class HangMan extends Application{
         Line post = new Line(60, 500, 60, 100);
         Line crossbar = new Line(60, 100, 200, 100);
         Line noose = new Line(200, 100, 200, 140);
-//        drawHead();
-//        drawBody();
-//        drawArm("left");
-//        drawArm("right");
-//        drawLeg("left");
-//        drawLeg("right");
         pane.getChildren().addAll(baseline, post, crossbar, noose);
 
         String wordString = getWord();
@@ -49,46 +45,88 @@ public class HangMan extends Application{
             wordDisplay.getChildren().add(tile);
         }
         pane.setBottom(wordDisplay);
+
+        for (char ch = 'a'; ch <= 'z'; ch++){
+            alphabet.add(ch);
+        }
+
+
+        FlowPane alphabetDisplay = new FlowPane();
+        alphabetDisplay.setPrefWidth(200);
+        displayAlphabet(alphabetDisplay);
+
+
+
+
         primaryStage.setScene(scene);
         primaryStage.show();
-        Scanner input = new Scanner(System.in);
 
 
-        System.out.println("Go ahead and guess a letter");
         scene.setOnKeyPressed(e ->{
             char guess = e.getText().charAt(0);
-            if (wordString.indexOf(guess) == -1){
-                switch (guessesLeft) {
-                    case 1 : drawLeg("right");
-                        System.out.print("You Lose");
-                    case 2 : drawLeg("left");
-                        break;
-                    case 3 : drawArm("right");
-                        break;
-                    case 4 : drawArm("left");
-                        break;
-                    case 5 : drawBody();
-                        break;
-                    case 6 : drawHead();
-                        break;
+            if (alphabet.indexOf(guess) == -1) { return; }
+            else if (guessesLeft > 0) {
+                if (wordString.indexOf(guess) == -1) {
+                    draw();
+                    guessesLeft--;
                 }
-                guessesLeft--;
-            }
-            else {
-                for (HangmanTile tile : wordTiles) {
-                    if (tile.letter == guess) {
-                        tile.text.setText("" + guess);
-                        lettersFound++;
+                else {
+                    for (HangmanTile tile : wordTiles) {
+                        if (tile.letter == guess) {
+                            tile.text.setText("" + guess);
+                            lettersFound++;
+                        }
+                        if (isGameOver()) {
+                            guessesLeft = 0;
+                        }
                     }
                 }
+                alphabet.set(alphabet.indexOf(guess), ' ');
+                displayAlphabet(alphabetDisplay);
+
             }
         });
     }
 
+    public void displayAlphabet(FlowPane alphabetDisplay){
+        alphabetDisplay.setHgap(10);
+        alphabetDisplay.setAlignment(Pos.CENTER);
+        alphabetDisplay.getChildren().clear();
+        for (int i = 0; i < 26; i++) {
+            HangmanTile tile = new HangmanTile(alphabet.get(i));
+            alphabetTiles.add(tile);
+            tile.text.setText(alphabet.get(i).toString());
+            alphabetDisplay.getChildren().add(tile);
+        }
+        pane.setRight(alphabetDisplay);
+    }
 
 
     public boolean isGameOver(){
         return (lettersFound == wordTiles.size());
+    }
+
+    public void draw(){
+        switch (guessesLeft) {
+            case 1:
+                drawLeg("right");
+                System.out.print("You Lose");
+            case 2:
+                drawLeg("left");
+                break;
+            case 3:
+                drawArm("right");
+                break;
+            case 4:
+                drawArm("left");
+                break;
+            case 5:
+                drawBody();
+                break;
+            case 6:
+                drawHead();
+                break;
+        }
     }
     private void drawHead() {
         Circle head = new Circle(200, 165, 25);
@@ -140,5 +178,7 @@ public class HangMan extends Application{
             return this.letter;
         }
     }
+
+
 }
 
