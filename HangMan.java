@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -20,8 +21,8 @@ public class HangMan extends Application{
     int MAX_GUESSES = 6;
     int guessesLeft = MAX_GUESSES;
     ArrayList<HangmanTile> wordTiles = new ArrayList<HangmanTile>();
-    ArrayList<HangmanTile> alphabetTiles = new ArrayList<HangmanTile>();
-    ArrayList<Character> alphabet = new ArrayList<Character>();
+    ArrayList<HangmanTile> alphabetTiles = new ArrayList<>();
+    ArrayList<Character> alphabet = new ArrayList<>();
 
 
     @Override
@@ -63,27 +64,30 @@ public class HangMan extends Application{
 
 
         scene.setOnKeyPressed(e ->{
-            char guess = e.getText().charAt(0);
-            if (alphabet.indexOf(guess) == -1) { return; }
-            else if (guessesLeft > 0) {
-                if (wordString.indexOf(guess) == -1) {
-                    draw();
-                    guessesLeft--;
-                }
-                else {
-                    for (HangmanTile tile : wordTiles) {
-                        if (tile.letter == guess) {
-                            tile.text.setText("" + guess);
-                            lettersFound++;
-                        }
-                        if (isGameOver()) {
-                            guessesLeft = 0;
+            if (!isLetterPressed(e)) { return; }
+            else {
+                char guess = e.getText().charAt(0);
+                if (alphabet.indexOf(guess) == -1) {
+                    return;
+                } else if (guessesLeft > 0) {
+                    if (wordString.indexOf(guess) == -1) {
+                        draw();
+                        guessesLeft--;
+                    } else {
+                        for (HangmanTile tile : wordTiles) {
+                            if (tile.letter == guess) {
+                                tile.text.setText("" + guess);
+                                lettersFound++;
+                            }
+                            if (isGameOver()) {
+                                guessesLeft = 0;
+                            }
                         }
                     }
-                }
-                alphabet.set(alphabet.indexOf(guess), ' ');
-                displayAlphabet(alphabetDisplay);
+                    alphabet.set(alphabet.indexOf(guess), ' ');
+                    displayAlphabet(alphabetDisplay);
 
+                }
             }
         });
     }
@@ -174,9 +178,38 @@ public class HangMan extends Application{
             text.setFont(Font.font("Courier", 36));
             this.getChildren().add(text);
         }
-        public char getLetter(){
-            return this.letter;
+    }
+
+    public boolean isLetterPressed(KeyEvent e){
+        switch (e.getCode()) {
+            case A: return true;
+            case B: return true;
+            case C: return true;
+            case D: return true;
+            case E: return true;
+            case F: return true;
+            case G: return true;
+            case H: return true;
+            case I: return true;
+            case J: return true;
+            case K: return true;
+            case L: return true;
+            case M: return true;
+            case N: return true;
+            case O: return true;
+            case P: return true;
+            case Q: return true;
+            case R: return true;
+            case S: return true;
+            case T: return true;
+            case U: return true;
+            case V: return true;
+            case W: return true;
+            case X: return true;
+            case Y: return true;
+            case Z: return true;
         }
+        return false;
     }
 
 
