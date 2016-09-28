@@ -83,6 +83,7 @@ public class HangMan extends Application{
                                 guessesLeft = 0;
                             }
                         }
+
                     }
                     alphabet.set(alphabet.indexOf(guess), ' ');
                     displayAlphabet(alphabetDisplay);
@@ -211,7 +212,9 @@ public class HangMan extends Application{
         }
         return false;
     }
-
+    public static void main(String[] args) {
+        launch(args);
+    }
 
 }
 
